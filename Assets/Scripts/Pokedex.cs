@@ -4,47 +4,45 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-
-
 public class Pokedex : MonoBehaviour
 {
-    Pokemon pokemon;
+    public Pokemon pokemon;
+    public PokemonJSONClass pjc;
+
     public GameObject result;
+
     public InputField inputField;
+
+    public Text nome, numero;
+    public Image pic;
+
+
     public UnityWebRequest www;
-    public DownloadHandler handler;
+
     public Text dbgt;
+
     // Start is called before the first frame update
     void Start()
     {
         pokemon = Camera.main.GetComponent<Pokemon>();
         result.SetActive(false);
+
+        Destroy(dbgt);
     }
 
     public void Search() {
 
-        pokemon.pokemon.razza = inputField.text;
         string url = "https://pokeapi.co/api/v2/pokemon/" + inputField.text + "/";
 
         StartCoroutine(Get(url));
-        /*if (UseApi()) {
-            result.SetActive(true);
-        }*/
+        
     }
 
-    bool UseApi() {
-
-        string url = "https://pokeapi.co/api/v2/pokemon/" + inputField.text + "/";
-
-        www = UnityWebRequest.Get(url);
-        handler = www.downloadHandler;
-        dbgt.text = JsonUtility.FromJson<string>(handler.text);
-
-        return true;
-    }
 
     public IEnumerator Get(string url/*, System.Action<Pokemon.Monster> callback*/) {
-        using(UnityWebRequest www = UnityWebRequest.Get(url)) {
+
+        using (UnityWebRequest www = UnityWebRequest.Get(url)) {
+
             yield return www.SendWebRequest();
 
             if (www.isNetworkError) {
@@ -52,15 +50,22 @@ public class Pokedex : MonoBehaviour
             }
             else {
                 if (www.isDone) {
+
                     string jsonRes = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
                     Debug.Log(jsonRes);
+                    pjc = PokemonJSONClass.CreateFromJSON(jsonRes);
 
-                    pokemon.pokemon = JsonUtility.FromJson<Pokemon.Monster>(jsonRes);
-                    inputField.text = pokemon.pokemon.razza;
+                    nome.text = pjc.name;
+                    numero.text = pjc.id.ToString();
+
+                    WWW picwww = new WWW(pjc.sprites.front_default);
+                    yield return picwww;
+                    pic.sprite = Sprite.Create(picwww.texture, new Rect(0, 0, picwww.texture.width, picwww.texture.height), new Vector2(0, 0));
+
+                    pokemon.Convert(pjc);
+
                     result.SetActive(true);
-
-                    //callback(pokemon.pokemon);
-
+                    
                 }
             }
 
