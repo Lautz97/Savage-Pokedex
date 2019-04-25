@@ -14,7 +14,7 @@ public class Pokedex : MonoBehaviour
     public InputField inputField;
 
     public Text nome, numero;
-    public Image pic;
+    public Image pic, picsheet;
 
 
     public UnityWebRequest www;
@@ -61,6 +61,7 @@ public class Pokedex : MonoBehaviour
                     WWW picwww = new WWW(pjc.sprites.front_default);
                     yield return picwww;
                     pic.sprite = Sprite.Create(picwww.texture, new Rect(0, 0, picwww.texture.width, picwww.texture.height), new Vector2(0, 0));
+                    picsheet.sprite = pic.sprite;
 
                     pokemon.Convert(pjc);
 

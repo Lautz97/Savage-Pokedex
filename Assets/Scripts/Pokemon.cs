@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Pokemon : MonoBehaviour
 {
+    public GameObject mapper;
+    
+    public PokemonJSONClass pkmjson;
+
     public string razza;
 
     public string tipo;
+
+    public string[] abilità;
 
     public string agilità;
     public string forza;
@@ -29,14 +35,17 @@ public class Pokemon : MonoBehaviour
 
     public void Convert(PokemonJSONClass pkmj) {
 
+        pkmjson = pkmj;
+
         razza = pkmj.name;
 
         SetType(pkmj);
 
         SetBaseStats(pkmj);
 
-        SetMosse(pkmj);
-        
+        //SetMosse(pkmj);
+
+        mapper.GetComponent<MapperForPS>().Populate(this);
 
     }
 
