@@ -12,6 +12,14 @@ public class PannelloMossaGUIHandler : MonoBehaviour
     public GameObject alterazioneBase, alterazioni;
 
     public void PopolaScheda(Mossa mossa) {
+
+        for (int i = 0; i < alterazioni.transform.childCount; i++) {
+            if (alterazioni.transform.GetChild(i).gameObject.activeInHierarchy) {
+                alterazioni.transform.GetChild(i).gameObject.SetActive(false);
+                Destroy(alterazioni.transform.GetChild(i));
+            }
+        }
+
         nomeMossa.text = mossa.nome;
         tipoMossa.text = mossa.tipo;
 
@@ -31,7 +39,7 @@ public class PannelloMossaGUIHandler : MonoBehaviour
                 na.transform.Find("Attributo").GetComponent<Text>().text = ConvertiStA(alt.attributo);
                 na.transform.Find("Malus").GetComponent<Text>().text = alt.valore + " T.d.D.";
                 string prob;
-                if (alt.probabilità == 0) prob = "Auto Cast";
+                if (alt.probabilità == 0) prob = "Colpo Garantito";
                 else prob = alt.probabilità + " %";
                 na.transform.Find("Possibilità").GetComponent<Text>().text = prob;
             }
