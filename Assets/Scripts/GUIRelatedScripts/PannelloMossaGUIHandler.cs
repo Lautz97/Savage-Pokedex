@@ -7,7 +7,7 @@ public class PannelloMossaGUIHandler : MonoBehaviour
 {
     public Text nomeMossa, tipoMossa, precisioneMossa,
         dannoMossa, pa, pp, tipologiaMossa,
-        effetto;
+        effetto,effettoIta;
 
     public GameObject alterazioneBase, alterazioni;
 
@@ -26,33 +26,27 @@ public class PannelloMossaGUIHandler : MonoBehaviour
 
         if (mossa.alterazioni != null) {
             foreach (Mossa.AlterazioneStato alt in mossa.alterazioni) {
-                /*if(alt.attributo != "")*/ {
-                    GameObject na = Instantiate(alterazioneBase, alterazioni.transform);
-                    na.SetActive(true);
-                    na.transform.Find("Attributo").GetComponent<Text>().text = ConvertiStA(alt.attributo);
-                    na.transform.Find("Malus").GetComponent<Text>().text = alt.valore + " T.d.D.";
-                    string prob;
-                    if (alt.probabilità == 0) prob = "Auto Cast";
-                    else prob = alt.probabilità + " %";
-                    na.transform.Find("Possibilità").GetComponent<Text>().text = prob;
-                }/*
-                else {
-                    GameObject na = Instantiate(alterazioneBase, alterazioni.transform);
-                    string prob;
-                    if (alt.probabilità != 0) prob = "";
-                    else {
-                        na.transform.Find("Attributo").GetComponent<Text>().text = "";
-                        na.transform.Find("Malus").GetComponent<Text>().text = "";
-                        prob = alt.probabilità + " %";
-                        na.transform.Find("Possibilità").GetComponent<Text>().text = prob;
-                        na.SetActive(true);
-                    }
-                }*/
+                GameObject na = Instantiate(alterazioneBase, alterazioni.transform);
+                na.SetActive(true);
+                na.transform.Find("Attributo").GetComponent<Text>().text = ConvertiStA(alt.attributo);
+                na.transform.Find("Malus").GetComponent<Text>().text = alt.valore + " T.d.D.";
+                string prob;
+                if (alt.probabilità == 0) prob = "Auto Cast";
+                else prob = alt.probabilità + " %";
+                na.transform.Find("Possibilità").GetComponent<Text>().text = prob;
             }
         }
 
         effetto.text = mossa.descrizione;
+        effettoIta.text = mossa.descrizioneIta;
 
+    }
+
+    public void ClearPanel() {
+        gameObject.GetComponentInChildren<Text>().text = "";
+        /*for (int i = 0; i < alterazioni.transform.childCount; i++) {
+            Destroy(alterazioni.transform.GetChild(i));
+        }*/
     }
 
     string ConvertiStA(string s) {

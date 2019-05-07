@@ -7,11 +7,24 @@ public class Linker : MonoBehaviour
     
     public PokedexGUIHandler pokedexGUI;
     public SearchHandler searchHandler;
+    public DebugPanelScript debugPanel;
+
+    public void Link(string s) {
+        debugPanel.AddAilment(s);
+    }
 
     public void Link(PokemonJsonClass pokemonJson, Sprite sprite, Downloader.MotivoRicerca motivoRicerca) {
 
         Pokemon pokemon = GetComponent<LinkerPokemon>().LinkPokemon(pokemonJson, sprite);
         
+        if (motivoRicerca == Downloader.MotivoRicerca.Pokedex) {
+            pokedexGUI.AssociateSearchResult(pokemon);
+            searchHandler.SearchForThis(Downloader.OggettoRicerca.Ability, Downloader.MotivoRicerca.Pokedex, pokemon);
+            searchHandler.SearchForThis(Downloader.OggettoRicerca.Move, Downloader.MotivoRicerca.Pokedex, pokemon);
+        }
+    }
+    public void Link(Pokemon pokemon, Downloader.MotivoRicerca motivoRicerca) {
+
         if (motivoRicerca == Downloader.MotivoRicerca.Pokedex) {
             pokedexGUI.AssociateSearchResult(pokemon);
             searchHandler.SearchForThis(Downloader.OggettoRicerca.Ability, Downloader.MotivoRicerca.Pokedex, pokemon);

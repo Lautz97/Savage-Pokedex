@@ -1,29 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class LinkerMossa : MonoBehaviour
 {
     public void Link(MoveJsonClass moveJson, Mossa mossa) {
-        foreach (MoveJsonClass.Name nome in moveJson.names) {
-            if (nome.language.name == "it") {
-                mossa.nome = nome.name;
-                break;
-            }
-        }
+        
+        mossa.nome = moveJson.names[3].name;
         mossa.PP = GetPP(moveJson.pp);
         mossa.tipo = moveJson.type.name;
+
         GetTipologiaDanniPA(moveJson, mossa);
         AggiungiPAExtra(mossa);
+
+        //LE ALTERAZIONI SONO SBAGLIATE
         CercaAlterazioniStato(moveJson, mossa);
 
-        mossa.descrizione = moveJson.effect_entries[0].effect;
+        mossa.descrizione = moveJson.effect_entries[0].effect.Replace("$effect_chance",moveJson.effect_chance.ToString());
+
+        mossa.descrizioneIta = moveJson.flavor_text_entries[3].flavor_text.Replace("\n", " ");
 
         mossa.precisione = GetPrecisione(moveJson);
+
+
+        mossa.categoria = (Mossa.Category)Enum.Parse(typeof(Mossa.Category), moveJson.meta.category.name.Replace("-", "").Replace("+", ""));
+
+
     }
 
     int GetPrecisione(MoveJsonClass mjc) {
-        int ret = -(95 - mjc.accuracy) / 10;
+        int ret = ((95 - mjc.accuracy) / 10)*-1;
         if (ret == -9) ret = 0;
         return ret;
     }

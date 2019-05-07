@@ -43,7 +43,48 @@ public class Mossa
 
     public int[] raggio = null;
 
-    public string descrizione = null;
+    public string descrizione = null, descrizioneIta;
 
+
+    public Category categoria;
+
+    public enum Category {
+        damage,
+        ailment,
+        netgoodstats,
+        heal,
+        damageailment,
+        swagger,
+        damagelower,
+        damageraise,
+        damageheal,
+        ohko,
+        wholefieldeffect,
+        fieldeffect,
+        forceswitch,
+        unique
+    }
+
+    public enum Ailment {
+        unknown,
+        none,
+        paralysis,
+        sleep,
+        freeze,
+        burn,
+        poison,
+        confusion,
+        infatuation,
+        trap,
+        nightmare,
+        torment,
+        disable,
+        yawn,
+        healblock,
+        notypeimmunity,
+        leechseed,
+        embargo,
+        perishsong,
+    }
 
 }

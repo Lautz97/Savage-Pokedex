@@ -19,6 +19,10 @@ public class LinkerPokemon : MonoBehaviour
         SetAbilitiesURL(pjc, pokemon);
 
         SetMosseURL(pjc, pokemon);
+
+        if (!PlayerPrefs.HasKey(pokemon.nome)) {
+            //Pokemon.SavePokemon(pokemon);
+        }
         
         return pokemon;
     }

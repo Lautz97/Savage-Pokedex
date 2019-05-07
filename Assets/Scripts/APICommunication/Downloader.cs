@@ -14,6 +14,7 @@ public class Downloader : MonoBehaviour
         public AbilityJsonClass abilityJson = null;
         public Pokemon pokemon = null;
         public MotivoRicerca motivo;
+        public string nome;
     }
 
     public void Search(OggettoRicerca oggettoRicerca, string name, MotivoRicerca motivoRicerca, Pokemon pkm = null) {
@@ -26,17 +27,25 @@ public class Downloader : MonoBehaviour
         ParametroCoroutine parametro = new ParametroCoroutine {
             indirizzo = url,
             motivo = motivoRicerca,
+            nome = name,
         };
+
+        if(oggettoRicerca == OggettoRicerca.MoveAilment) {
+            parametro.indirizzo = name;
+        }
+
         if (pkm != null) parametro.pokemon = pkm;
 
         StartCoroutine(ienumName, parametro);
 
+
+
     }
 
-    public IEnumerator GetPokemonJson(ParametroCoroutine parametro) {
-
-        using (UnityWebRequest www = UnityWebRequest.Get(parametro.indirizzo)) {
-
+    public IEnumerator GetMoveAilmentJson(ParametroCoroutine parametro) {
+        string uri = "https://pokeapi.co/api/v2/move-ailment/" + parametro.indirizzo + "/";
+        using (UnityWebRequest www = UnityWebRequest.Get(uri)) {
+            Debug.Log(uri);            
             yield return www.SendWebRequest();
 
             if (www.isNetworkError) { Debug.Log(www.error); }
@@ -44,18 +53,44 @@ public class Downloader : MonoBehaviour
                 if (www.isDone) {
 
                     string jsonRes = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-                    PokemonJsonClass pjc = PokemonJsonClass.CreateFromJSON(jsonRes);
+                    Debug.Log(jsonRes);
+                    AilmentJsonClass mjc = AilmentJsonClass.CreateFromJSON(jsonRes);
 
-                    parametro = new ParametroCoroutine {
-                        pokemonJson = pjc,
-                        motivo = parametro.motivo,
-                    };
-
-                    yield return StartCoroutine(GetPokemonSprite(parametro));
+                    linker.Link(mjc.name);
 
                 }
             }
+        }
+    }
 
+    public IEnumerator GetPokemonJson(ParametroCoroutine parametro) {
+        
+        if (PlayerPrefs.HasKey(parametro.nome)) {
+            linker.Link(Pokemon.LoadPokemon(parametro.nome), parametro.motivo);
+        }
+        else {
+            using (UnityWebRequest www = UnityWebRequest.Get(parametro.indirizzo)) {
+
+                yield return www.SendWebRequest();
+
+                if (www.isNetworkError) { Debug.Log(www.error); }
+                else {
+                    if (www.isDone) {
+
+                        string jsonRes = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+                        PokemonJsonClass pjc = PokemonJsonClass.CreateFromJSON(jsonRes);
+
+                        parametro = new ParametroCoroutine {
+                            pokemonJson = pjc,
+                            motivo = parametro.motivo,
+                        };
+
+                        yield return StartCoroutine(GetPokemonSprite(parametro));
+
+                    }
+                }
+
+            }
         }
     }
 
@@ -74,7 +109,6 @@ public class Downloader : MonoBehaviour
                     Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0, 0));
 
                     linker.Link(parametro.pokemonJson, sprite, parametro.motivo);
-
                 }
             }
         }
@@ -175,9 +209,12 @@ public class Downloader : MonoBehaviour
         Pokemon,
         Ability,
         Move,
+        MoveAilment,
     };
     public enum MotivoRicerca {
         Pokedex,
+        MoveDex,
+        Debug,
     };
 }
 
