@@ -17,7 +17,7 @@ public class PokedexGUIHandler : MonoBehaviour
 
         this.pokemon = pokemon;
         image.sprite = pokemon.image;
-        pokemonName.text = pokemon.nome;
+        pokemonName.text = pokemon.name;
         pokemonCode.text = pokemon.numero.ToString();
 
         pokeSheetBtn.interactable = true;

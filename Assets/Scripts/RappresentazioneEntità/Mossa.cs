@@ -9,7 +9,7 @@ public class Mossa
     //
     public string nomeOriginale;
     //
-    public string nome = null;
+    public string name = null;
 
     public int precisione;
 

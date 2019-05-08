@@ -7,7 +7,7 @@ public class LinkerPokemon : MonoBehaviour
     public Pokemon LinkPokemon(PokemonJsonClass pjc, Sprite sprite) {
 
         Pokemon pokemon = new Pokemon {
-            nome = pjc.name,
+            name = pjc.name,
             url = "https://wiki.pokemoncentral.it/" + pjc.name,
             numero = pjc.id,
             tipo = PickType(pjc),
@@ -21,7 +21,7 @@ public class LinkerPokemon : MonoBehaviour
 
         SetMosseURL(pjc, pokemon);
 
-        if (!PlayerPrefs.HasKey(pokemon.nome)) {
+        if (!PlayerPrefs.HasKey(pokemon.name)) {
             HardMemoryScript.SavePokemon(pokemon);
         }
         

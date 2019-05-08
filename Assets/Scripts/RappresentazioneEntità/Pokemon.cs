@@ -9,7 +9,7 @@ public class Pokemon
     //composizione del pokemon
     public string url = null;
 
-    public string nome = null;
+    public string name = null;
     public int numero;
 
     [XmlIgnore]

@@ -19,7 +19,7 @@ public class PokeSheetGUIHandler : MonoBehaviour
     public void PopulateSheet(Pokemon pokemon) {
 
         pokemonId.text = pokemon.numero.ToString();
-        pokemonName.text = SetTitleCase(pokemon.nome);
+        pokemonName.text = SetTitleCase(pokemon.name);
         pokemonType.text = pokemon.tipo;
 
         pokemonSprite.sprite = pokemon.image;
@@ -61,9 +61,9 @@ public class PokeSheetGUIHandler : MonoBehaviour
     void ImpostaAbilità(Pokemon pokemon) {
         foreach (Abilità abi in pokemon.abilità) {
             GameObject na = Instantiate(abilitàBase, containerAbilità.transform);
-            na.name = abi.nome;
-            na.GetComponent<Text>().text = abi.nome;
-            na.GetComponent<Button>().onClick.AddListener(() => CustomListener_AbilitàLinkWiki(abi.nome));
+            na.name = abi.name;
+            na.GetComponent<Text>().text = abi.name;
+            na.GetComponent<Button>().onClick.AddListener(() => CustomListener_AbilitàLinkWiki(abi.name));
         }
     }
 
@@ -72,14 +72,14 @@ public class PokeSheetGUIHandler : MonoBehaviour
             {
                 GameObject na = Instantiate(mossaBase, containerMossa.transform);
                 na.SetActive(true);
-                na.name = mossa.nome;
-                na.transform.Find("NomeMossa").GetComponent<Text>().text = mossa.nome;
+                na.name = mossa.name;
+                na.transform.Find("NomeMossa").GetComponent<Text>().text = mossa.name;
                 if (mossa.modalitàApprendimento == "level-up")
                     na.transform.Find("Livello").GetComponent<Text>().text = mossa.livello.ToString();
                 else
                     na.transform.Find("Livello").GetComponent<Text>().text = "";
                 na.transform.Find("Modalità").GetComponent<Text>().text = mossa.modalitàApprendimento;
-                na.transform.Find("Info").GetComponent<Button>().onClick.AddListener(() => CustomListener_AbilitàLinkWiki(mossa.nome));
+                na.transform.Find("Info").GetComponent<Button>().onClick.AddListener(() => CustomListener_AbilitàLinkWiki(mossa.name));
                 na.transform.Find("PannelloMossa").GetComponent<Button>().onClick.AddListener(() => CustomListener_PannelloMossa(mossa));
             }
         }

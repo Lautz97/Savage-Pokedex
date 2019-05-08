@@ -7,7 +7,7 @@ public class LinkerMossa : MonoBehaviour
 {
     public void Link(MoveJsonClass moveJson, Mossa mossa) {
         
-        mossa.nome = moveJson.names[3].name;
+        mossa.name = moveJson.names[3].name;
         mossa.PP = GetPP(moveJson.pp);
         mossa.tipo = moveJson.type.name;
 
@@ -23,9 +23,9 @@ public class LinkerMossa : MonoBehaviour
 
         mossa.precisione = GetPrecisione(moveJson);
 
-
         mossa.categoria = (Mossa.Category)Enum.Parse(typeof(Mossa.Category), moveJson.meta.category.name.Replace("-", "").Replace("+", ""));
 
+        //HardMemoryScript.SaveMossa(mossa);
 
     }
 
@@ -150,7 +150,7 @@ public class LinkerMossa : MonoBehaviour
     
     void AggiungiPAExtra(Mossa mossa) {
         if (mossa.tipologia == "speciale") mossa.penetrazineArmatura++;
-        if (mossa.nome.Contains("raggio")) mossa.penetrazineArmatura++;
+        if (mossa.name.Contains("raggio")) mossa.penetrazineArmatura++;
     }
 
     void CercaAlterazioniStato(MoveJsonClass mjc, Mossa mossa) {

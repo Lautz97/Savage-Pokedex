@@ -7,7 +7,7 @@ public class Abilità
 
     public string url = null;
 
-    public string nome = null;
+    public string name = null;
 
     public string nomeOriginale;
 

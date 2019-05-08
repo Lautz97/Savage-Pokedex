@@ -8,6 +8,10 @@ public class PanelSwap : MonoBehaviour
     //list of all panels that can be swapped
     public GameObject[] panels;
 
+    public string activePanel = "";
+
+    public SearchHandler search;
+
     void Start()
     {
         GoToPanel("MainPanel");
@@ -15,13 +19,27 @@ public class PanelSwap : MonoBehaviour
 
     //set active the selected panel and hide the others
     public void GoToPanel(string panelName) {
-        if (panelName == "Quit") Application.Quit(); else
-        foreach (GameObject g in panels) {
-            if (g.name != panelName) {
-                g.SetActive(false);
+        activePanel = panelName;
+        if (panelName == "Quit") {
+            Application.Quit();
+        }
+        else {
+            foreach (GameObject g in panels) {
+                if (g.name != panelName) {
+                    g.SetActive(false);
+                }
+                else {
+                    g.SetActive(true);
+                }
             }
-            else {
-                g.SetActive(true);
+        }            
+    }
+
+    private void Update() {
+        if(activePanel == "PokedexPanel") {
+            if (Input.GetKeyDown(KeyCode.Return)) {
+                activePanel = "";
+                search.SearchForThis();
             }
         }
     }

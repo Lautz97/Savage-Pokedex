@@ -13,7 +13,7 @@ public static class HardMemoryScript
         using (StringWriter sw = new StringWriter()) {
             xmlSerializer.Serialize(sw, pokemon);
 
-            PlayerPrefs.SetString(pokemon.nome.ToLower(), sw.ToString());
+            PlayerPrefs.SetString(pokemon.name.ToLower(), sw.ToString());
 
         }
     }
@@ -30,4 +30,28 @@ public static class HardMemoryScript
             }
         }
     }
+
+    public static void SaveMossa(Mossa mossa) {
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(Mossa));
+        using (StringWriter sw = new StringWriter()) {
+            xmlSerializer.Serialize(sw, mossa);
+
+            PlayerPrefs.SetString(mossa.nomeOriginale.ToLower(), sw.ToString());
+
+        }
+    }
+
+    public static Mossa LoadMossa(string nome) {
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(Mossa));
+        string xml = PlayerPrefs.GetString(nome);
+        if (xml.Length == 0) {
+            return new Mossa();
+        }
+        else {
+            using (StringReader reader = new StringReader(xml)) {
+                return xmlSerializer.Deserialize(reader) as Mossa;
+            }
+        }
+    }
+
 }
