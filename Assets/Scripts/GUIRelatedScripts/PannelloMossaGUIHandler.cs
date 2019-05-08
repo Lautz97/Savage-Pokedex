@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PannelloMossaGUIHandler : MonoBehaviour
 {
+    public VerticalLayoutGroup group;
+
     public Text nomeMossa, tipoMossa, precisioneMossa,
         dannoMossa, pa, pp, tipologiaMossa,
         effetto,effettoIta;
@@ -14,11 +16,13 @@ public class PannelloMossaGUIHandler : MonoBehaviour
     public void PopolaScheda(Mossa mossa) {
 
         for (int i = 0; i < alterazioni.transform.childCount; i++) {
+            group.enabled = false;
             if (alterazioni.transform.GetChild(i).gameObject.activeInHierarchy) {
-                alterazioni.transform.GetChild(i).gameObject.SetActive(false);
-                Destroy(alterazioni.transform.GetChild(i));
+                Destroy(alterazioni.transform.GetChild(i).gameObject);
             }
+            group.enabled = true;
         }
+        
 
         nomeMossa.text = mossa.nome;
         tipoMossa.text = mossa.tipo;
@@ -34,6 +38,7 @@ public class PannelloMossaGUIHandler : MonoBehaviour
 
         if (mossa.alterazioni != null) {
             foreach (Mossa.AlterazioneStato alt in mossa.alterazioni) {
+                group.enabled = false;
                 GameObject na = Instantiate(alterazioneBase, alterazioni.transform);
                 na.SetActive(true);
                 na.transform.Find("Attributo").GetComponent<Text>().text = ConvertiStA(alt.attributo);
@@ -42,6 +47,7 @@ public class PannelloMossaGUIHandler : MonoBehaviour
                 if (alt.probabilità == 0) prob = "Colpo Garantito";
                 else prob = alt.probabilità + " %";
                 na.transform.Find("Possibilità").GetComponent<Text>().text = prob;
+                group.enabled = true;
             }
         }
 
@@ -52,9 +58,13 @@ public class PannelloMossaGUIHandler : MonoBehaviour
 
     public void ClearPanel() {
         gameObject.GetComponentInChildren<Text>().text = "";
-        /*for (int i = 0; i < alterazioni.transform.childCount; i++) {
-            Destroy(alterazioni.transform.GetChild(i));
-        }*/
+        for (int i = 0; i < alterazioni.transform.childCount; i++) {
+            group.enabled = false;
+            if (alterazioni.transform.GetChild(i).gameObject.activeInHierarchy) {
+                Destroy(alterazioni.transform.GetChild(i).gameObject);
+            }
+            group.enabled = true;
+        }
     }
 
     string ConvertiStA(string s) {
