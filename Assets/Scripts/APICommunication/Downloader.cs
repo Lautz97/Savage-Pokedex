@@ -66,9 +66,28 @@ public class Downloader : MonoBehaviour
     public IEnumerator GetPokemonJson(ParametroCoroutine parametro) {
         
         if (PlayerPrefs.HasKey(parametro.nome)) {
-            linker.Link(Pokemon.LoadPokemon(parametro.nome), parametro.motivo);
+            Pokemon p = HardMemoryScript.LoadPokemon(parametro.nome);
+
+            using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(p.imageUrl)) {
+
+                yield return www.SendWebRequest();
+
+                if (www.isNetworkError) { Debug.Log(www.error); }
+                else {
+                    if (www.isDone) {
+
+                        Texture2D t = ((DownloadHandlerTexture)www.downloadHandler).texture;
+
+                        Sprite sprite = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0, 0));
+
+                        p.image = sprite;
+                    }
+                }
+            }
+
+            linker.Link(p, parametro.motivo);
         }
-        else {
+        else{
             using (UnityWebRequest www = UnityWebRequest.Get(parametro.indirizzo)) {
 
                 yield return www.SendWebRequest();

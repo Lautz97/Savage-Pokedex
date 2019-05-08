@@ -45,9 +45,9 @@ public class Mossa
 
     public string descrizione = null, descrizioneIta;
 
-
     public Category categoria;
 
+    [Serializable]
     public enum Category {
         damage,
         ailment,
@@ -65,6 +65,7 @@ public class Mossa
         unique
     }
 
+    [Serializable]
     public enum Ailment {
         unknown,
         none,

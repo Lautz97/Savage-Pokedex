@@ -1,9 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml;
 using System.Xml.Serialization;
+
 
 [Serializable]
 public class Pokemon
@@ -14,7 +12,10 @@ public class Pokemon
     public string nome = null;
     public int numero;
 
+    [XmlIgnore]
     public Sprite image = null;
+
+    public string imageUrl = "";
 
     public string tipo = null;
 
@@ -27,26 +28,5 @@ public class Pokemon
     public string vigore = null;
 
     public Mossa[] mosse = null;
-
-    public static void SavePokemon(Pokemon pokemon) {
-        XmlSerializer xmlSerializer = new XmlSerializer(typeof(Pokemon));
-        using (StringWriter sw = new StringWriter()) {
-            xmlSerializer.Serialize(sw, pokemon);
-            PlayerPrefs.SetString(pokemon.nome.ToLower(), sw.ToString());
-        }
-    }
-
-    public static Pokemon LoadPokemon(string nome) {
-        XmlSerializer xmlSerializer = new XmlSerializer(typeof(Pokemon));
-        String pokeXml = PlayerPrefs.GetString(nome);
-        if(pokeXml.Length == 0) { 
-            return new Pokemon();
-        }
-        else {
-            using (StringReader reader = new StringReader(pokeXml)) {
-                return xmlSerializer.Deserialize(reader) as Pokemon;
-            }
-        }
-    }
 
 }

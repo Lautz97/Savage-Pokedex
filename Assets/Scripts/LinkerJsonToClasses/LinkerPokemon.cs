@@ -11,7 +11,8 @@ public class LinkerPokemon : MonoBehaviour
             url = "https://wiki.pokemoncentral.it/" + pjc.name,
             numero = pjc.id,
             tipo = PickType(pjc),
-            image = sprite
+            image = sprite,
+            imageUrl = pjc.sprites.front_default
         };
 
         SetBaseStats(pjc, pokemon);
@@ -21,7 +22,7 @@ public class LinkerPokemon : MonoBehaviour
         SetMosseURL(pjc, pokemon);
 
         if (!PlayerPrefs.HasKey(pokemon.nome)) {
-            //Pokemon.SavePokemon(pokemon);
+            HardMemoryScript.SavePokemon(pokemon);
         }
         
         return pokemon;
